@@ -10,14 +10,16 @@ export default class TodoListItem extends Component {
       onDoneToggled } = this.props;
 
     let classNames = 'todo-list-item';
+
+   
     if(done) {
       classNames += ' done';
     }
 
     if(important) {
       classNames += ' important';
-    }
-  
+    } 
+
     return (
       <span className={classNames}>
         <span

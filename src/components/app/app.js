@@ -19,7 +19,8 @@ export default class App extends Component {
        label,
        done: false,
        important:false,
-       id: this.maxId++
+       id: this.maxId++,
+       matched: 'matched'
       };
    }
 
@@ -29,7 +30,7 @@ export default class App extends Component {
         this.createItem('Go to walk'),
         this.createItem('Have a lunch')
       ]
-    }
+    };
 
     this.deleteItem = (id) => {
       this.setState(({todoData}) => {
@@ -46,10 +47,10 @@ export default class App extends Component {
       })
     }
 
-    this.addItem = () => {
+    this.addItem = (label) => {
       this.setState( ({todoData}) => {
         
-      const newData = [...todoData, this.createItem('dummy')];
+      const newData = [...todoData, this.createItem(label)];
       return {
         todoData: newData
       }
@@ -88,9 +89,28 @@ export default class App extends Component {
         return {
           todoData: newArray
         };
+      });
+    };
+
+    this.search = (searchWord) => {
+      this.setState(({ todoData }) => {
+        const searchedArray = todoData.map( (el) => {
+
+          if(!el.label.includes(searchWord)) {
+            el.matched = 'notMatched';
+          }
+          else {
+            el.matched = 'matched';
+          }
+          return el;
+        });
+        return {
+          todoData: searchedArray
+        }
       })
     }
-  }
+  };
+
 
   render() {
 
@@ -103,7 +123,7 @@ export default class App extends Component {
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel d-flex">
-          <SearchPanel />
+          <SearchPanel onSearch={this.search} />
           <ItemStatusFilter />
         </div>
   
@@ -112,8 +132,9 @@ export default class App extends Component {
         onDoneToggled={this.onDoneToggled}
         onImportantToggled={(id)=> this.onImportantToggled(id)} />
         <AddItemForm
-        onAddItem={ () => this.addItem()} />
+        onAddItem={ (label) => this.addItem(label)} />
       </div>
     );
   }
 }
+
