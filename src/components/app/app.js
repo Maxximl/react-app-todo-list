@@ -29,7 +29,8 @@ export default class App extends Component {
         this.createItem('Drink Coffe!'),
         this.createItem('Go to walk'),
         this.createItem('Have a lunch')
-      ]
+      ],
+      filter: 'active'
     };
 
     this.deleteItem = (id) => {
@@ -109,25 +110,42 @@ export default class App extends Component {
         }
       })
     }
+
+    this.onFilterChanged = (filter) => {
+    this.setState({filter});
+    }
+
+    this.filtration = (data,filter) => {
+      switch(filter) {
+        case 'all': return data;
+        break;
+        case 'active': return data.filter((item) => !item.done);
+        break;
+        case 'done': return data.filter((item) => item.done);
+        break;
+        default: return data;
+      }
+    }
   };
 
 
   render() {
 
-    let { todoData } = this.state;
+    let { todoData,filter } = this.state;
     
     const doneCount = this.state.todoData.filter(el => el.done).length;
     const todoCount = this.state.todoData.length - doneCount;
-
+    const filteredData = this.filtration(todoData, filter);
     return (
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel d-flex">
           <SearchPanel onSearch={this.search} />
-          <ItemStatusFilter />
+          <ItemStatusFilter onFilterChanged={this.onFilterChanged}
+          filter={filter}/>
         </div>
   
-        <TodoList todos={todoData} 
+        <TodoList todos={filteredData} filter={this.state.filter}
         onDeleted={ (id) => this.deleteItem(id) }
         onDoneToggled={this.onDoneToggled}
         onImportantToggled={(id)=> this.onImportantToggled(id)} />
