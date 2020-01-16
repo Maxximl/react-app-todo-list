@@ -18,7 +18,8 @@ const TodoList = ({ filter, todos, onDeleted,
         <TodoListItem {...itemProps } 
         onDeleted={ () => onDeleted(id)}
         onImportantToggled={()=> onImportantToggled(id)}
-        onDoneToggled={()=>onDoneToggled(id)}/>
+        onDoneToggled={()=>onDoneToggled(id)}
+        onEdit/>
       </li>
     );
   });
