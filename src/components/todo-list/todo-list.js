@@ -5,7 +5,7 @@ import './todo-list.css';
 
 const TodoList = ({ filter, todos, onDeleted, 
                     onImportantToggled,
-                    onDoneToggled }) => {
+                    onDoneToggled, onEdit }) => {
 
   const elements = todos.map((item) => {
     const { id, ...itemProps } = item;
@@ -19,7 +19,7 @@ const TodoList = ({ filter, todos, onDeleted,
         onDeleted={ () => onDeleted(id)}
         onImportantToggled={()=> onImportantToggled(id)}
         onDoneToggled={()=>onDoneToggled(id)}
-        onEdit/>
+        onEdit={()=>onEdit()}/>
       </li>
     );
   });

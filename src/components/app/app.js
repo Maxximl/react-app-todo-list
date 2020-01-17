@@ -5,6 +5,7 @@ import SearchPanel from '../search-panel';
 import TodoList from '../todo-list';
 import ItemStatusFilter from '../item-status-filter';
 import AddItemForm from '../add-item-form';
+import FormDialog from '../input-dialog';
 
 import './app.css';
 
@@ -30,7 +31,8 @@ export default class App extends Component {
         this.createItem('Go to walk'),
         this.createItem('Have a lunch')
       ],
-      filter: 'active'
+      filter: 'active',
+      isOpen: false
     };
 
     this.deleteItem = (id) => {
@@ -126,12 +128,21 @@ export default class App extends Component {
         default: return data;
       }
     }
+
+      this.onEdit = () => {
+    this.setState(({isOpen})=>{
+      return {
+        isOpen: !isOpen
+      }
+    });
+  }
   };
+
 
 
   render() {
 
-    let { todoData,filter } = this.state;
+    let { todoData,filter, isOpen } = this.state;
     
     const doneCount = this.state.todoData.filter(el => el.done).length;
     const todoCount = this.state.todoData.length - doneCount;
@@ -148,9 +159,10 @@ export default class App extends Component {
         <TodoList todos={filteredData} filter={this.state.filter}
         onDeleted={ (id) => this.deleteItem(id) }
         onDoneToggled={this.onDoneToggled}
-        onImportantToggled={(id)=> this.onImportantToggled(id)} />
+        onImportantToggled={(id)=> this.onImportantToggled(id)} onEdit={this.onEdit} />
         <AddItemForm
         onAddItem={ (label) => this.addItem(label)} />
+        <FormDialog isOpen={isOpen}/>
       </div>
     );
   }
